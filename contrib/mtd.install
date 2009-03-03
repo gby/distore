@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# Copy mtd image from remote host and write it to flash device accoring to flash env
+# This script assumes that DropBear ssh client is used.
+
+set -e
+
+HOST=$1
+FILE=$2
+FILENAME=$(basename $FILE)
+SCP="scp"
+SSH="ssh"
+ERROR=/tmp/error
+CONFIG=/etc/distore.conf
+DROPBEAR_PASSWORD=$(grep Secret $CONFIG | cut -f 2 -d '=' | tr -d ' ')
+export DROPBEAR_PASSWORD
+
+scp $HOST:$FILE /tmp/$FILENAME
+source /tmp/$FILENAME # set DEV and LEN for remote host
+
+eval $(fw_printenv bootdev) # set current bootdev
+[ "$bootdev" = "/dev/mtd0" ] && newbootdev="/dev/mtd1" || newbootdev="/dev/mtd0"
+
+ssh $HOST nanddump -o -b -l $LEN $DEV | (flash_eraseall $newbootdev && nandwrite -p -i $LEN $newbootdev -)
+
+
+if [ "$newbootdev" = "/dev/mtd0" ]; then
+	bootcmd="nand read 0x21400000 0x0 0xA00000; bootm 0x21400000"
+else
+	bootcmd="nand read 0x21400000 0xA00000 0xA00000; bootm 0x21400000"
+fi
+
+fw_setenv bootcmd $bootcmd
+fw_setenv bootdev $newbootdev
+
+# finally, since all has gone well, "register" our new firmware with update system
+echo "DEV=$newbootdev" > $FILE
+echo "LEN=$LEN" >> $FILE
+
+reboot
+

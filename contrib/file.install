@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# rsync file from given host.
+# This script assumes that DropBear ssh client is used.
+
+set -e
+
+HOST=$1
+FILE=$2
+CONFIG=/etc/distore.conf
+DROPBEAR_PASSWORD=$(grep ^Secret $CONFIG | cut -f 2 -d '=' | tr -d ' ')
+export DROPBEAR_PASSWORD
+
+rm -rf $(dirname $FILE)/*~ # remove old possible broken files
+rsync --archive --fuzzy --rsh=ssh $HOST:$FILE $FILE~
+mv $FILE~ $FILE
+
