@@ -10,3 +10,5 @@ iniparser-clean:
 	rm -rf $(srcdir)/iniparser3.0b/libiniparser.* clean
 
 EXTRA_DIST =  iniparser3.0b
+
+SUBDIRS = libghthash-0.6.2

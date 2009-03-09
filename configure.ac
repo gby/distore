@@ -42,6 +42,9 @@ AC_CHECK_HEADERS([arpa/inet.h fcntl.h netinet/in.h stdlib.h string.h sys/socket.
 
 # Checks for typedefs, structures, and compiler characteristics.
 
+# Initialize hash library
+AC_CONFIG_SUBDIRS([lib/libghthash-0.6.2])
+
 # Checks for library functions.
 AC_CHECK_FUNCS([memset socket])
 
