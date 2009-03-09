@@ -2,7 +2,7 @@
  *
  *    Copyright (C) 2009 Codefidence Ltd www.codefidence.com
  *
- *    This file is a part of Distore
+ *    This file is a part of Distore.
  *
  *    Distore is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by

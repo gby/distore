@@ -19,28 +19,41 @@
  * 
  ****************************************************************************/
 
-#ifndef DISTORE_DEBUG_H
-#define DISTORE_DEBUG_H
+#ifndef DISTORE_CONFIG_H
+#define DISTORE_CONFIG_H
 
-#ifndef DEBUG
-/* gcc's cpp has extensions; it allows for macros with a variable number of
- *    arguments. We use this extension here to preprocess dmesg away. */
-#define dmesg(level, format, args...) ((void)0)
-#else
+#include <sys/time.h>
+#include <ght_hash_table.h>
 
-enum {
-	DBG_ERROR = 1,
-	DBG_WARN,
-	DBG_INFO,
-	DBG_DEBUG,
-	DBG_TRACE
+/* Load config from specified ini file.
+ * Returns 0 on success and negative value otherwise
+ * 
+ * After successfull call to this function, config
+ * structure may be obtained using getConfig()
+ */
+int loadConfig(char *path);
+
+/* Structure to hold our configuration. Initialized from ini file */
+struct Config {
+	char * secret;
+	char * multicastGroup;
+	char * unicastTargets;
+	unsigned int listenPort;
+	struct timeval announcePeriod;
+	struct timeval checkDoUpdatePeriod;
+	ght_hash_table_t *contents;
 };
 
-void dmesg(int level, char *format, ...);
-/* print a message, if it is considered significant enough.
- *       Adapted from [K&R2], p. 174 */
-#endif
+struct Config* getConfig();
+
+/* Represents one content secion of ini file.
+ * "Content"s are stored in "contents" hash table of Config struct.
+ */
+struct Content {
+	unsigned int id;
+	char *condentDir;
+	char *filePattern;
+	char *installScript;
+};
 
 #endif
-        
-

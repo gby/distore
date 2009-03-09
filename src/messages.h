@@ -43,7 +43,7 @@ struct Announce {
 	struct ContentVersion *versionsList ;   /* Actual version of distributed contents */
 };
 
-/* Return most recent annount that we've recieved from network */
+/* Return most recent announce that we've recieved from network */
 struct Announce * getCurrentAnnounce();
 
 /* Read announce from socket. Data is stored to memory and may be accessed elsewhere by calling getCurrentAnnounce() */

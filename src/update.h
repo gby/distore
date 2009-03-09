@@ -19,28 +19,21 @@
  * 
  ****************************************************************************/
 
-#ifndef DISTORE_DEBUG_H
-#define DISTORE_DEBUG_H
+#ifndef DISTORE_UPDATE_H
+#define DISTORE_UPDATE_H
 
-#ifndef DEBUG
-/* gcc's cpp has extensions; it allows for macros with a variable number of
- *    arguments. We use this extension here to preprocess dmesg away. */
-#define dmesg(level, format, args...) ((void)0)
-#else
+#include <ght_hash_table.h>
 
-enum {
-	DBG_ERROR = 1,
-	DBG_WARN,
-	DBG_INFO,
-	DBG_DEBUG,
-	DBG_TRACE
-};
+void runUpdateIfNeeded();
 
-void dmesg(int level, char *format, ...);
-/* print a message, if it is considered significant enough.
- *       Adapted from [K&R2], p. 174 */
-#endif
+/* Tries to read current versions according to info in our config file.
+ * If particular version can not be determined - its set to 0
+ * Hash keys are versions' ids and hash values are respective version numbers.
+ */
+ght_hash_table_t * getCurrentVersions();
+
+void runUpdateIfNeeded();
+void doBootUpdate();
+void doRulesUpdate();
 
 #endif
-        
-
