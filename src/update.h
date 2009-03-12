@@ -24,16 +24,21 @@
 
 #include <ght_hash_table.h>
 
-void runUpdateIfNeeded();
-
-/* Tries to read current versions according to info in our config file.
- * If particular version can not be determined - its set to 0
+/* On first call - tries to read current versions according to info in our
+ * config file. If particular version can not be determined - its set to 0.
+ *
+ * After each successful update installation, hash table is updated to match
+ * version locally installed.
+ *
  * Hash keys are versions' ids and hash values are respective version numbers.
+ *
+ * May return NULL due to insufficient memory.
  */
 ght_hash_table_t * getCurrentVersions();
 
+/* Compares local version to those available in most recent annouce. If there is
+ * a new version of any content available - runs update process.
+ */
 void runUpdateIfNeeded();
-void doBootUpdate();
-void doRulesUpdate();
 
 #endif
