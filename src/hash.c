@@ -2,7 +2,7 @@
  *
  *    Copyright (C) 2009 Codefidence Ltd www.codefidence.com
  *
- *    This file is a part of Distore.
+ *    This file is a part of Distore
  *
  *    Distore is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
@@ -19,22 +19,28 @@
  * 
  ****************************************************************************/
 
-#ifndef DISTORE_HASH_H
-#define DISTORE_HASH_H
+#include <openssl/evp.h>
+#include <stdio.h>
+#include <string.h>
 
-#define SHA1_LENGTH 20
+#include "hash.h"
 
-/* SHA1 computation functions.
- * To calculate particular digest:
- *   call sha1sumInit
- *   call sha1sumUpdate one or more times feeding it with message data
- *   call sha1sumFinal to obtain your digest. char *digest should point
- *        to buffer of SHA1_LENGTH bytes
- *
- * WARNING! These functions share static data!
- */
-void sha1sumInit();
-void sha1sumUpdate(const char *input, const unsigned int input_size);
-void sha1sumFinal(unsigned char *digest);
+static EVP_MD_CTX mdctx;
 
-#endif
+void sha1sumInit() {
+	const EVP_MD *md = EVP_sha1();
+
+	EVP_MD_CTX_init(&mdctx);
+	EVP_DigestInit_ex(&mdctx, md, NULL);
+}
+
+void sha1sumUpdate(const char *input, const unsigned int input_size) {
+	EVP_DigestUpdate(&mdctx, input, input_size);
+}
+
+void sha1sumFinal(unsigned char *digest) {
+	unsigned int dlen = 0;
+
+	EVP_DigestFinal_ex(&mdctx, digest, &dlen);
+	EVP_MD_CTX_cleanup(&mdctx);
+}
