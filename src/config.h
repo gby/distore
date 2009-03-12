@@ -41,7 +41,7 @@ struct Config {
 	unsigned int listenPort;
 	struct timeval announcePeriod;
 	struct timeval checkDoUpdatePeriod;
-	ght_hash_table_t *contents;
+	ght_hash_table_t * contents;
 };
 
 struct Config* getConfig();
@@ -51,9 +51,9 @@ struct Config* getConfig();
  */
 struct Content {
 	unsigned int id;
-	char *condentDir;
-	char *filePattern;
-	char *installScript;
+	char * contentDir;
+	char * filePattern;
+	char * installScript;
 };
 
 #endif

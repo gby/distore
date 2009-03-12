@@ -38,8 +38,8 @@ int returnError(const char *section, const char *path) {
 
 int loadConfig(char *path) {
 
-	char *contentNames = NULL;
-	char *newContentName = NULL;
+	char * contentNames = NULL;
+	char * newContentName = NULL;
 	char * nextContentName = NULL;
 
 	dictionary *newconf = iniparser_load(path);
@@ -133,7 +133,7 @@ int loadConfig(char *path) {
 	{
 		struct Content * content = NULL;
 		ght_iterator_t iterator;
-		const void *key;
+		const void * key = NULL;
 
 		dmesg(DBG_DEBUG, "\n");
 		dmesg(DBG_DEBUG, "  Contents:\n");
