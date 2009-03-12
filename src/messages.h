@@ -24,27 +24,32 @@
 
 #include <netinet/in.h>
 
-#define SHA1_LENGTH 20
+#include <ght_hash_table.h>
+
+#include "hash.h"
 
 #define PROTO_MAGIC 0xC60C1DC1
 #define PROTO_VERSION 0
 
-struct ContentVersion {
-	unsigned int id;
+/* Update current announce (the one that is broadcasted) according
+ * to getCurrentVersions().
+ * May fail with negative return value due to insufficient memory.
+ */
+int rebuildCurrentAnnounce(ght_hash_table_t * currentVersions);
+
+/* Update specific version in current announce
+ */
+void updateCurrentAnnounce(unsigned int id, unsigned long version);
+
+struct NetVersion {
 	unsigned long version;
+	struct sockaddr_in ip;
 };
 
-/* Announcement message that each node broadcasts */
-struct Announce {
-	unsigned int magic;                     /* The fixed magic number 0xC60C1DC1 */
-	unsigned int version;                   /* Protocol version number, always 0 */
-	unsigned char hash[SHA1_LENGTH];        /* SHA1 sum of the versionsCount and versionsList[] fields together with the pre-shared secret */
-	unsigned int versionsCount;             /* How many items are in the below array */
-	struct ContentVersion *versionsList ;   /* Actual version of distributed contents */
-};
-
-/* Return most recent announce that we've recieved from network */
-struct Announce * getCurrentAnnounce();
+/* Return most current versions available from recieved announces.
+ * Hash keys are versions' ids and hash values are NetVersion structs.
+ */
+ght_hash_table_t * getAvailableVersions();
 
 /* Read announce from socket. Data is stored to memory and may be accessed elsewhere by calling getCurrentAnnounce() */
 void readAnnounce(int fd);
