@@ -77,7 +77,12 @@ int loadConfig(char *path) {
 	distoreConfig.checkDoUpdatePeriod.tv_sec = (time_t) iniparser_getint(newconf, ":CheckDoUpdatePeriod", 60);
 
 	{ /* parse all Contents sections */
-		distoreConfig.contents = ght_create(8);
+		distoreConfig.contents = ght_create(DEFAULT_HASH_SIZE);
+		if (distoreConfig.contents == NULL) {
+			fprintf(stderr, "Failed to create distoreConfig.contents hash table!\n");
+			return -1;
+		}
+		ght_set_rehash(distoreConfig.contents, 1);
 
 		do {
 			struct Content * newContent = NULL;
@@ -138,8 +143,7 @@ int loadConfig(char *path) {
 		dmesg(DBG_DEBUG, "\n");
 		dmesg(DBG_DEBUG, "  Contents:\n");
 		for (content = (struct Content *)ght_first(distoreConfig.contents, &iterator, &key); content;
-									content = (struct Content *)ght_next(distoreConfig.contents, &iterator, &key))
-		{
+									content = (struct Content *)ght_next(distoreConfig.contents, &iterator, &key)) {
 			dmesg(DBG_DEBUG, "    Id=%u\n", content->id);
 			dmesg(DBG_DEBUG, "    ContentDir=%s\n", content->contentDir);
 			dmesg(DBG_DEBUG, "    FilePattern=%s\n", content->filePattern);

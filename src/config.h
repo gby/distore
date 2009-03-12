@@ -25,6 +25,11 @@
 #include <sys/time.h>
 #include <ght_hash_table.h>
 
+/* Default hash size for created hashes.
+ * Hashes will be automatically resized (costly) when half of the size is exceeded.
+ */
+#define DEFAULT_HASH_SIZE 8
+
 /* Load config from specified ini file.
  * Returns 0 on success and negative value otherwise
  * 
