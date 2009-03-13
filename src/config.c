@@ -48,20 +48,20 @@ int loadConfig(char *path) {
 		return -1;
 	}
 
-	distoreConfig.secret = iniparser_getstring(newconf, ":Secret", NULL);
+	distoreConfig.secret = iniparser_getstring(newconf, "Networking:Secret", NULL);
 	
-	distoreConfig.multicastGroup = iniparser_getstring(newconf, ":MulticastGroup", NULL);
-	distoreConfig.unicastTargets = iniparser_getstring(newconf, ":UnicastTargets", NULL);
+	distoreConfig.multicastGroup = iniparser_getstring(newconf, "Networking:MulticastGroup", NULL);
+	distoreConfig.unicastTargets = iniparser_getstring(newconf, "Networking:UnicastTargets", NULL);
 	if ((distoreConfig.multicastGroup == NULL) && (distoreConfig.unicastTargets == NULL)) {
 		fprintf(stderr, "One of MulticastGroup or UnicastTargets has to be defined in %s\n", path);
 		return -1;
 	}
 
-	distoreConfig.listenPort = iniparser_getint(newconf, ":ListenPort", 0);
+	distoreConfig.listenPort = iniparser_getint(newconf, "Networking:ListenPort", 0);
 	if (distoreConfig.listenPort == 0)
 		return returnError("ListenPort", path);
 
-	contentNames = iniparser_getstring(newconf, ":Contents", NULL);
+	contentNames = iniparser_getstring(newconf, "Content:Contents", NULL);
 	if (contentNames == NULL) 
 		return returnError("Contents", path);
 
@@ -71,10 +71,11 @@ int loadConfig(char *path) {
 		return -1;
 	}
 
-	distoreConfig.announcePeriod.tv_sec = (time_t) iniparser_getint(newconf, ":AnnouncePeriod", 0); if (distoreConfig.announcePeriod.tv_sec == 0)
+	distoreConfig.announcePeriod.tv_sec = (time_t) iniparser_getint(newconf, "Networking:AnnouncePeriod", 0);
+	if (distoreConfig.announcePeriod.tv_sec == 0)
 		return returnError("AnnouncePeriod", path);
 
-	distoreConfig.checkDoUpdatePeriod.tv_sec = (time_t) iniparser_getint(newconf, ":CheckDoUpdatePeriod", 60);
+	distoreConfig.checkDoUpdatePeriod.tv_sec = (time_t) iniparser_getint(newconf, "Installation:CheckDoUpdatePeriod", 60);
 
 	{ /* parse all Contents sections */
 		distoreConfig.contents = ght_create(DEFAULT_HASH_SIZE);
