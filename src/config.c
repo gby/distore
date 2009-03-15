@@ -42,7 +42,7 @@ int loadConfig(char *path) {
 	char * newContentName = NULL;
 	char * nextContentName = NULL;
 
-	dictionary *newconf = iniparser_load(path);
+	dictionary * newconf = iniparser_load(path);
 	if (newconf == NULL) {
 		fprintf(stderr, "Could not parse config file %s\n", path);
 		return -1;

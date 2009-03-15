@@ -43,8 +43,8 @@ void evSendAnnounce(int fd, short event, void *arg) {
 }
 
 void evRunUpdateIfNeeded(int fd, short event, void *arg) {
-	struct Config *distoreConfig = getConfig();
-	struct event *ev = (struct event *) arg;
+	struct Config * distoreConfig = getConfig();
+	struct event * ev = (struct event *) arg;
 	runUpdateIfNeeded();
 	event_add(ev, &(distoreConfig->checkDoUpdatePeriod));
 }

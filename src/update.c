@@ -41,7 +41,7 @@
 /* since filter function is a callback, we can not pass parameters to it - 
  * doing in indirect way.
  */
-static char *filterPattern = NULL;
+static char * filterPattern = NULL;
 int filter(const struct dirent *dir) {
 	return ! fnmatch(filterPattern, dir->d_name, 0);
 }

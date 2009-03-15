@@ -216,7 +216,7 @@ void readAnnounce(int fd) {
 
 	/* Check signature */
 	{
-		struct Config *distoreConfig = getConfig();
+		struct Config * distoreConfig = getConfig();
 		sha1sumInit();
 		sha1sumUpdate((const char *)netAnnounce.versions, sizeof(struct Version)*netAnnounce.announceHeader->versionsCount);
 		sha1sumUpdate((const char *)distoreConfig->secret, strlen(distoreConfig->secret));
@@ -283,8 +283,8 @@ void readAnnounce(int fd) {
 void sendAnnounce(int fd) {
 	struct sockaddr_in addr;
 	unsigned int addrlen = sizeof(struct sockaddr_in);
-	struct Config *distoreConfig = getConfig();
-	char *uniTarget = NULL;
+	struct Config * distoreConfig = getConfig();
+	char * uniTarget = NULL;
 
 	/* set up destination address */
 	memset(&addr, 0, addrlen);

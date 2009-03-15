@@ -31,7 +31,7 @@ extern int dbg_msglevel; /* the higher, the more messages... */
 #else
 void dmesg(int level, char* format, ...) {
 	va_list args;
-	char *prefix;
+	char * prefix;
 
 	if (level>dbg_msglevel)
 		return;
