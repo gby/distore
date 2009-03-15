@@ -128,6 +128,8 @@ int loadConfig(char *path) {
 		} while (*nextContentName != '\0');
 	}
 
+	free(newContentName);
+
 	dmesg(DBG_DEBUG, "loaded configuration:\n");
 	dmesg(DBG_DEBUG, "  MulticastGoups=\"%s\"\n", distoreConfig.multicastGroup);
 	dmesg(DBG_DEBUG, "  UnicastTargets=\"%s\"\n", distoreConfig.unicastTargets);

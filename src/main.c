@@ -68,7 +68,9 @@ int main(int argc, char * argv[]) {
 
 	/* We are good to go - switch to daemon */
 	if (fg != 1) {
-		daemon(0,1);
+		int result = daemon(0,1);
+		if (result != 0)
+			perror("Failed to daemonize");
 	}
 
 	event_init();
@@ -77,7 +79,7 @@ int main(int argc, char * argv[]) {
 	{
 		fd = CreateDgramServerSock(distoreConfig->listenPort, distoreConfig->multicastGroup);
 		if (fd < 0) {
-			fprintf(stderr, "failed to create socket\n");
+			fprintf(stderr, "Failed to create socket!\n");
 			exit(EXIT_FAILURE);
 		}
 		dmesg(DBG_DEBUG, "Bound to socket\n");
@@ -94,7 +96,7 @@ int main(int argc, char * argv[]) {
 	{
 		fd = CreateDgramClientSock();
 		if (fd < 0) {
-			fprintf(stderr, "failed to create socket\n");
+			fprintf(stderr, "Failed to create socket\n");
 			exit(EXIT_FAILURE);
 		}
 		dmesg(DBG_DEBUG, "Created client socket\n");
